@@ -17,6 +17,21 @@ License:
 ## API
 
 ```json
+{
+  "id":"getApi",
+  "result":{
+    "firmware":["EncoderInterfaceSimple"],
+    "functions":[
+      "enableAllOutputs",
+      "disableAllOutputs",
+      "outputsEnabled",
+      "getPositions"
+    ],
+    "parameters":[],
+    "properties":[],
+    "callbacks":[]
+  }
+}
 ```
 
 ## More Detailed Modular Device Information

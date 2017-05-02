@@ -53,6 +53,8 @@ private:
   EncoderFunctors encoders_[encoder_interface_simple::constants::ENCODER_COUNT];
 
   // Handlers
+  void positivePulseHandler(const int32_t position);
+  void negativePulseHandler(const int32_t position);
   void enableAllOutputsHandler();
   void disableAllOutputsHandler();
   void outputsEnabledHandler();

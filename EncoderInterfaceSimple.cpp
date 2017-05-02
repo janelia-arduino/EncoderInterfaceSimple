@@ -112,6 +112,22 @@ long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
 // modular_server_.property(property_name).getElementValue(value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(value) value type must match the property array element default type
 
+void EncoderInterfaceSimple::positivePulseHandler(const int32_t position)
+{
+  digitalWrite(constants::output_pins[0],
+               !digitalRead(constants::output_pins[0]));
+  digitalWrite(constants::output_pins[1],
+               HIGH);
+}
+
+void EncoderInterfaceSimple::negativePulseHandler(const int32_t position)
+{
+  digitalWrite(constants::output_pins[0],
+               !digitalRead(constants::output_pins[0]));
+  digitalWrite(constants::output_pins[1],
+               LOW);
+}
+
 void EncoderInterfaceSimple::enableAllOutputsHandler()
 {
   enableAllOutputs();
