@@ -33,12 +33,16 @@ CONSTANT_STRING(hardware_name,"encoder_interface_simple");
 // Properties
 
 // Parameters
+CONSTANT_STRING(encoder_index_parameter_name,"encoder_index");
+
+CONSTANT_STRING(position_parameter_name,"position");
 
 // Functions
 CONSTANT_STRING(enable_all_outputs_function_name,"enableAllOutputs");
 CONSTANT_STRING(disable_all_outputs_function_name,"disableAllOutputs");
 CONSTANT_STRING(outputs_enabled_function_name,"outputsEnabled");
 CONSTANT_STRING(get_positions_function_name,"getPositions");
+CONSTANT_STRING(set_position_function_name,"setPosition");
 
 // Callbacks
 

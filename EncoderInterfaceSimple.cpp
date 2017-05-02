@@ -21,6 +21,8 @@ void EncoderInterfaceSimple::setup()
     encoders_[encoder_index].setup(constants::encoder_a_pins[encoder_index],
                                    constants::encoder_b_pins[encoder_index]);
   }
+  encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
+  encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
 
   // Pin Setup
   pinMode(constants::enable_pin,OUTPUT);
@@ -50,6 +52,11 @@ void EncoderInterfaceSimple::setup()
   // Properties
 
   // Parameters
+  modular_server::Parameter & encoder_index_parameter = modular_server_.createParameter(constants::encoder_index_parameter_name);
+  encoder_index_parameter.setRange(0,constants::ENCODER_COUNT-1);
+
+  modular_server::Parameter & position_parameter = modular_server_.createParameter(constants::position_parameter_name);
+  position_parameter.setTypeLong();
 
   // Functions
   modular_server::Function & enable_all_outputs_function = modular_server_.createFunction(constants::enable_all_outputs_function_name);
@@ -65,6 +72,11 @@ void EncoderInterfaceSimple::setup()
   modular_server::Function & get_positions_function = modular_server_.createFunction(constants::get_positions_function_name);
   get_positions_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getPositionsHandler));
   get_positions_function.setReturnTypeArray();
+
+  modular_server::Function & set_position_function = modular_server_.createFunction(constants::set_position_function_name);
+  set_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::setPositionHandler));
+  set_position_function.addParameter(encoder_index_parameter);
+  set_position_function.addParameter(position_parameter);
 
   // Callbacks
 
@@ -95,6 +107,12 @@ long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
   return position;
 }
 
+void EncoderInterfaceSimple::setPosition(const size_t encoder_index,
+                                         const long position)
+{
+  encoders_[encoder_index].write(position);
+}
+
 // Handlers must be non-blocking (avoid 'delay')
 //
 // modular_server_.parameter(parameter_name).getValue(value) value type must be either:
@@ -112,7 +130,7 @@ long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
 // modular_server_.property(property_name).getElementValue(value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(value) value type must match the property array element default type
 
-void EncoderInterfaceSimple::positivePulseHandler(const int32_t position)
+void EncoderInterfaceSimple::positiveEncoder0Handler(const int32_t position)
 {
   digitalWrite(constants::output_pins[0],
                !digitalRead(constants::output_pins[0]));
@@ -120,7 +138,7 @@ void EncoderInterfaceSimple::positivePulseHandler(const int32_t position)
                HIGH);
 }
 
-void EncoderInterfaceSimple::negativePulseHandler(const int32_t position)
+void EncoderInterfaceSimple::negativeEncoder0Handler(const int32_t position)
 {
   digitalWrite(constants::output_pins[0],
                !digitalRead(constants::output_pins[0]));
@@ -159,5 +177,16 @@ void EncoderInterfaceSimple::getPositionsHandler()
 
   modular_server_.response().endArray();
 
+}
+
+void EncoderInterfaceSimple::setPositionHandler()
+{
+  long encoder_index;
+  modular_server_.parameter(constants::encoder_index_parameter_name).getValue(encoder_index);
+
+  long position;
+  modular_server_.parameter(constants::position_parameter_name).getValue(position);
+
+  setPosition(encoder_index,position);
 }
 

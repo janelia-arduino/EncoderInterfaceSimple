@@ -25,9 +25,13 @@ License:
       "enableAllOutputs",
       "disableAllOutputs",
       "outputsEnabled",
-      "getPositions"
+      "getPositions",
+      "setPosition"
     ],
-    "parameters":[],
+    "parameters":[
+      "encoder_index",
+      "position"
+    ],
     "properties":[],
     "callbacks":[]
   }

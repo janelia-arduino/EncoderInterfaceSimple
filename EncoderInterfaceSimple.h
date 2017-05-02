@@ -40,6 +40,8 @@ public:
   bool outputsEnabled();
 
   long getPosition(const size_t encoder_index);
+  void setPosition(const size_t encoder_index,
+                   const long position);
 
 private:
   modular_server::Interrupt interrupts_[encoder_interface_simple::constants::INTERRUPT_COUNT_MAX];
@@ -53,12 +55,13 @@ private:
   EncoderFunctors encoders_[encoder_interface_simple::constants::ENCODER_COUNT];
 
   // Handlers
-  void positivePulseHandler(const int32_t position);
-  void negativePulseHandler(const int32_t position);
+  void positiveEncoder0Handler(const int32_t position);
+  void negativeEncoder0Handler(const int32_t position);
   void enableAllOutputsHandler();
   void disableAllOutputsHandler();
   void outputsEnabledHandler();
   void getPositionsHandler();
+  void setPositionHandler();
 
 };
 
