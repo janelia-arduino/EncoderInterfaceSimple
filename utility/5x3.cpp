@@ -17,35 +17,29 @@ namespace constants
 const modular_server::HardwareInfo hardware_info =
   {
     .name_ptr=&hardware_name,
-    .part_number=1210,
+    .part_number=1230,
     .version_major=1,
     .version_minor=0,
   };
 
-const size_t enable_pin = 52;
+const size_t enable_pin = 2;
 
-const size_t signal_pins[CHANNEL_COUNT] =
+const size_t encoder_a_pins[ENCODER_COUNT] =
   {
-    2,
-    6,
-    29,
-    30,
-    35,
-    36,
-    22,
-    23
+    3,
   };
 
-const size_t fault_pins[CHANNEL_COUNT] =
+const size_t encoder_b_pins[ENCODER_COUNT] =
   {
-    55,
-    54,
-    40,
-    41,
-    42,
-    50,
-    49,
-    16
+    4,
+  };
+
+const size_t output_pins[OUTPUT_COUNT] =
+  {
+    20,
+    21,
+    22,
+    23,
   };
 
 // Interrupts
@@ -53,17 +47,6 @@ const size_t fault_pins[CHANNEL_COUNT] =
 // Units
 
 // Properties
-const long power_max_default[CHANNEL_COUNT] =
-  {
-    100,
-    100,
-    100,
-    100,
-    100,
-    100,
-    100,
-    100,
-  };
 
 // Parameters
 

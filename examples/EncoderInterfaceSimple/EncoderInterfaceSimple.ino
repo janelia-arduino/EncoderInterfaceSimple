@@ -13,7 +13,7 @@
 #include "IndexedContainer.h"
 #include "FunctorCallbacks.h"
 
-#include "EventController.h"
+#include "EncoderFunctors.h"
 
 #include "ModularServer.h"
 #include "ModularDeviceBase.h"

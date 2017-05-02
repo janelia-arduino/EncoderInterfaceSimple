@@ -19,15 +19,13 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{INTERRUPT_COUNT_MAX=1};
 
-enum {CHANNEL_COUNT=8};
+enum {ENCODER_COUNT=1};
+enum {OUTPUT_COUNT=4};
 
-enum{EVENT_COUNT_MAX=36};
-enum{INDEXED_PWM_COUNT_MAX=16};
+extern const size_t encoder_a_pins[ENCODER_COUNT];
+extern const size_t encoder_b_pins[ENCODER_COUNT];
 
-enum{PWM_LEVEL_COUNT_MAX=4};
-
-extern const size_t signal_pins[CHANNEL_COUNT];
-extern const size_t fault_pins[CHANNEL_COUNT];
+extern const size_t output_pins[OUTPUT_COUNT];
 
 // Interrupts
 
@@ -35,7 +33,6 @@ extern const size_t fault_pins[CHANNEL_COUNT];
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
-extern const long power_max_default[CHANNEL_COUNT];
 
 // Parameters
 
