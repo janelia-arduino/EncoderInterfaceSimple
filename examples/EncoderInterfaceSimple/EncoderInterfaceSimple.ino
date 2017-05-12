@@ -15,6 +15,8 @@
 
 #include "EncoderFunctors.h"
 
+#include "ModularClient.h"
+
 #include "ModularServer.h"
 #include "ModularDeviceBase.h"
 #include "EncoderInterfaceSimple.h"
