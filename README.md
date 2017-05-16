@@ -46,6 +46,61 @@ License:
 }
 ```
 
+## API Verbose
+
+```json
+{
+  "id":"getApiVerbose",
+  "result":{
+    "firmware":["EncoderInterfaceSimple"],
+    "functions":[
+      {
+        "name":"enableAllOutputs",
+        "parameters":[]
+      },
+      {
+        "name":"disableAllOutputs",
+        "parameters":[]
+      },
+      {
+        "name":"outputsEnabled",
+        "parameters":[],
+        "result_info":{
+          "type":"bool"
+        }
+      },
+      {
+        "name":"getPositions",
+        "parameters":[],
+        "result_info":{
+          "type":"array",
+          "array_element_type":"long"
+        }
+      },
+      {
+        "name":"setPosition",
+        "parameters":[
+          "encoder_index",
+          "position"
+        ]
+      }
+    ],
+    "parameters":[
+      {
+        "name":"encoder_index",
+        "type":"long"
+      },
+      {
+        "name":"position",
+        "type":"long"
+      }
+    ],
+    "properties":[],
+    "callbacks":[]
+  }
+}
+```
+
 ## More Detailed Modular Device Information
 
 [modular-devices](https://github.com/janelia-modular-devices/modular-devices)

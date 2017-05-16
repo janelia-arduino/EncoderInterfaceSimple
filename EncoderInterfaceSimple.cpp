@@ -67,11 +67,12 @@ void EncoderInterfaceSimple::setup()
 
   modular_server::Function & outputs_enabled_function = modular_server_.createFunction(constants::outputs_enabled_function_name);
   outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
-  outputs_enabled_function.setReturnTypeBool();
+  outputs_enabled_function.setResultTypeBool();
 
   modular_server::Function & get_positions_function = modular_server_.createFunction(constants::get_positions_function_name);
   get_positions_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getPositionsHandler));
-  get_positions_function.setReturnTypeArray();
+  get_positions_function.setResultTypeArray();
+  get_positions_function.setResultTypeLong();
 
   modular_server::Function & set_position_function = modular_server_.createFunction(constants::set_position_function_name);
   set_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::setPositionHandler));
