@@ -39,6 +39,8 @@ extern const size_t enable_pin;
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern ConstantString invert_encoder_direction_property_name;
+extern const bool invert_encoder_direction_element_default;
 
 // Parameters
 extern ConstantString encoder_index_parameter_name;

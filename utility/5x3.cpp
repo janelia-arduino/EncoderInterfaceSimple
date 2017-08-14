@@ -47,6 +47,10 @@ const size_t output_pins[OUTPUT_COUNT] =
 // Units
 
 // Properties
+const bool invert_encoder_direction_default[ENCODER_COUNT] =
+  {
+    invert_encoder_direction_element_default,
+  };
 
 // Parameters
 

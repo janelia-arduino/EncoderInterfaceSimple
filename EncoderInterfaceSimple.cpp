@@ -15,15 +15,6 @@ void EncoderInterfaceSimple::setup()
   // Parent Setup
   ModularDeviceBase::setup();
 
-  // Encoders Setup
-  for (size_t encoder_index=0; encoder_index<constants::ENCODER_COUNT; ++encoder_index)
-  {
-    encoders_[encoder_index].setup(constants::encoder_a_pins[encoder_index],
-                                   constants::encoder_b_pins[encoder_index]);
-  }
-  encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
-  encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
-
   // Pin Setup
   pinMode(constants::enable_pin,OUTPUT);
   enableAllOutputs();
@@ -50,6 +41,8 @@ void EncoderInterfaceSimple::setup()
                               functions_,
                               callbacks_);
   // Properties
+  modular_server::Property & invert_encoder_direction_property = modular_server_.createProperty(constants::invert_encoder_direction_property_name,constants::invert_encoder_direction_default);
+  invert_encoder_direction_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<const size_t> *)0,*this,&EncoderInterfaceSimple::invertEncoderDirectionHandler));
 
   // Parameters
   modular_server::Parameter & encoder_index_parameter = modular_server_.createParameter(constants::encoder_index_parameter_name);
@@ -80,6 +73,14 @@ void EncoderInterfaceSimple::setup()
   set_position_function.addParameter(position_parameter);
 
   // Callbacks
+
+  // Encoders Setup
+  for (size_t encoder_index=0; encoder_index<constants::ENCODER_COUNT; ++encoder_index)
+  {
+    invertEncoderDirectionHandler(encoder_index);
+  }
+  encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
+  encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
 
 }
 
@@ -191,3 +192,20 @@ void EncoderInterfaceSimple::setPositionHandler()
   setPosition(encoder_index,position);
 }
 
+void EncoderInterfaceSimple::invertEncoderDirectionHandler(const size_t encoder_index)
+{
+  modular_server::Property & invert_encoder_direction_property = modular_server_.property(constants::invert_encoder_direction_property_name);
+  bool invert_encoder_direction;
+  invert_encoder_direction_property.getElementValue(encoder_index,invert_encoder_direction);
+
+  if (!invert_encoder_direction)
+  {
+    encoders_[encoder_index].setup(constants::encoder_a_pins[encoder_index],
+                                   constants::encoder_b_pins[encoder_index]);
+  }
+  else
+  {
+    encoders_[encoder_index].setup(constants::encoder_b_pins[encoder_index],
+                                   constants::encoder_a_pins[encoder_index]);
+  }
+}

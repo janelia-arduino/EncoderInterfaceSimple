@@ -64,6 +64,7 @@ private:
   void outputsEnabledHandler();
   void getPositionsHandler();
   void setPositionHandler();
+  void invertEncoderDirectionHandler(const size_t encoder_index);
 
 };
 

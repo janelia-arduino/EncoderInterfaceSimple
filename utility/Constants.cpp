@@ -31,6 +31,8 @@ CONSTANT_STRING(hardware_name,"encoder_interface_simple");
 // Units
 
 // Properties
+CONSTANT_STRING(invert_encoder_direction_property_name,"invertEncoderDirection");
+const bool invert_encoder_direction_element_default = false;
 
 // Parameters
 CONSTANT_STRING(encoder_index_parameter_name,"encoder_index");

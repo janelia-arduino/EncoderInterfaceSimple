@@ -33,6 +33,7 @@ extern const size_t output_pins[OUTPUT_COUNT];
 
 // Properties
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
+extern const bool invert_encoder_direction_default[ENCODER_COUNT];
 
 // Parameters
 
