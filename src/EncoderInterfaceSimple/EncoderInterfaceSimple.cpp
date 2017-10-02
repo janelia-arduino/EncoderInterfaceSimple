@@ -5,7 +5,7 @@
 // Authors:
 // Peter Polidoro polidorop@janelia.hhmi.org
 // ----------------------------------------------------------------------------
-#include "EncoderInterfaceSimple.h"
+#include "../EncoderInterfaceSimple.h"
 
 
 using namespace encoder_interface_simple;

@@ -7,10 +7,10 @@
 // ----------------------------------------------------------------------------
 #ifndef ENCODER_INTERFACE_SIMPLE_CONSTANTS_H
 #define ENCODER_INTERFACE_SIMPLE_CONSTANTS_H
-#include "ConstantVariable.h"
-#include "ModularServer.h"
+#include <ConstantVariable.h>
+#include <ModularServer.h>
 
-#include "EventController.h"
+#include <EventController.h>
 
 
 namespace encoder_interface_simple
