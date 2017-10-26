@@ -22,13 +22,14 @@ License:
 
 [encoder_interface_simple](https://github.com/janelia-modular-devices/encoder_interface_simple.git)
 
-## API
+## API NAMES
 
 ```json
 {
   "id":"getApi",
   "result":{
     "firmware":["EncoderInterfaceSimple"],
+    "verbosity":"NAMES",
     "functions":[
       "enableAllOutputs",
       "disableAllOutputs",
@@ -42,15 +43,14 @@ License:
     ],
     "properties":[
       "invertEncoderDirection"
-    ],
-    "callbacks":[]
+    ]
   }
 }
 ```
 
-## API Verbose
+## API GENERAL
 
-[API Verbose](./api.json)
+[API GENERAL](./api/)
 
 ## More Detailed Modular Device Information
 
