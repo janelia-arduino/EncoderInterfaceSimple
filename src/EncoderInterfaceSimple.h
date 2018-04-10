@@ -36,7 +36,7 @@ public:
                    const long position);
 
 private:
-  modular_server::Interrupt interrupts_[encoder_interface_simple::constants::INTERRUPT_COUNT_MAX];
+  modular_server::Pin pins_[encoder_interface_simple::constants::PIN_COUNT_MAX];
 
   modular_server::Property properties_[encoder_interface_simple::constants::PROPERTY_COUNT_MAX];
   modular_server::Parameter parameters_[encoder_interface_simple::constants::PARAMETER_COUNT_MAX];

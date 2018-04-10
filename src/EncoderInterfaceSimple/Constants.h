@@ -33,7 +33,7 @@ extern const modular_server::HardwareInfo hardware_info;
 
 extern const size_t enable_pin;
 
-// Interrupts
+// Pins
 
 // Units
 

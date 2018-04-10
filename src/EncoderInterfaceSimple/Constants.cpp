@@ -17,16 +17,16 @@ CONSTANT_STRING(device_name,"encoder_interface_simple");
 CONSTANT_STRING(firmware_name,"EncoderInterfaceSimple");
 // Use semantic versioning http://semver.org/
 const modular_server::FirmwareInfo firmware_info =
-  {
-    .name_ptr=&firmware_name,
-    .version_major=1,
-    .version_minor=0,
-    .version_patch=1,
-  };
+{
+  .name_ptr=&firmware_name,
+  .version_major=1,
+  .version_minor=0,
+  .version_patch=1,
+};
 
 CONSTANT_STRING(hardware_name,"encoder_interface_simple");
 
-// Interrupts
+// Pins
 
 // Units
 

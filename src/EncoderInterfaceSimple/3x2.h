@@ -17,7 +17,7 @@ namespace encoder_interface_simple
 namespace constants
 {
 //MAX values must be >= 1, >= created/copied count, < RAM limit
-enum{INTERRUPT_COUNT_MAX=1};
+enum{PIN_COUNT_MAX=1};
 
 enum {ENCODER_COUNT=1};
 enum {OUTPUT_COUNT=4};
