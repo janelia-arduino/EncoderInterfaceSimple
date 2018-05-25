@@ -21,11 +21,19 @@ enum{PIN_COUNT_MAX=1};
 
 enum {ENCODER_COUNT=1};
 enum {OUTPUT_COUNT=4};
+enum {SAMPLE_COUNT_MAX=2000};
 
 extern const size_t encoder_a_pins[ENCODER_COUNT];
 extern const size_t encoder_b_pins[ENCODER_COUNT];
 
 extern const size_t output_pins[OUTPUT_COUNT];
+
+struct Sample
+{
+  time_t time;
+  unsigned long milliseconds;
+  long positions[ENCODER_COUNT];
+};
 
 // Pins
 

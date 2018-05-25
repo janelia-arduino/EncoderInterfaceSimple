@@ -44,6 +44,9 @@ void EncoderInterfaceSimple::setup()
   modular_server::Property & invert_encoder_direction_property = modular_server_.createProperty(constants::invert_encoder_direction_property_name,constants::invert_encoder_direction_default);
   invert_encoder_direction_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<const size_t> *)0,*this,&EncoderInterfaceSimple::invertEncoderDirectionHandler));
 
+  modular_server::Property & sample_period_property = modular_server_.createProperty(constants::sample_period_property_name,constants::sample_period_default);
+  sample_period_property.setRange(constants::sample_period_min,constants::sample_period_max);
+
   // Parameters
   modular_server::Parameter & encoder_index_parameter = modular_server_.createParameter(constants::encoder_index_parameter_name);
   encoder_index_parameter.setRange(0,constants::ENCODER_COUNT-1);

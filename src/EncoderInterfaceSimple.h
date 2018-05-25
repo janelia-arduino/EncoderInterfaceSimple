@@ -16,6 +16,8 @@
 
 #include <EncoderFunctors.h>
 
+#include <EventController.h>
+
 #include <ModularServer.h>
 #include <ModularDeviceBase.h>
 
@@ -45,6 +47,10 @@ private:
 
   bool enabled_;
   EncoderFunctors encoders_[encoder_interface_simple::constants::ENCODER_COUNT];
+
+  EventController<encoder_interface_simple::constants::EVENT_COUNT_MAX> event_controller_;
+  Array<encoder_interface_simple::constants::Sample,
+        encoder_interface_simple::constants::SAMPLE_COUNT_MAX> samples_;
 
   // Handlers
   void positiveEncoder0Handler(const int32_t position);

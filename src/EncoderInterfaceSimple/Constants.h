@@ -18,10 +18,12 @@ namespace encoder_interface_simple
 namespace constants
 {
 //MAX values must be >= 1, >= created/copied count, < RAM limit
-enum{PROPERTY_COUNT_MAX=1};
+enum{PROPERTY_COUNT_MAX=2};
 enum{PARAMETER_COUNT_MAX=2};
 enum{FUNCTION_COUNT_MAX=5};
 enum{CALLBACK_COUNT_MAX=1};
+
+enum{EVENT_COUNT_MAX=16};
 
 extern ConstantString device_name;
 
@@ -41,6 +43,11 @@ extern const size_t enable_pin;
 // Property values must be long, double, bool, long[], double[], bool[], char[], ConstantString *, (ConstantString *)[]
 extern ConstantString invert_encoder_direction_property_name;
 extern const bool invert_encoder_direction_element_default;
+
+extern ConstantString sample_period_property_name;
+extern const long sample_period_min;
+extern const long sample_period_max;
+extern const long sample_period_default;
 
 // Parameters
 extern ConstantString encoder_index_parameter_name;
