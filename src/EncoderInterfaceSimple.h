@@ -29,13 +29,13 @@ class EncoderInterfaceSimple : public ModularDeviceBase
 public:
   virtual void setup();
 
-  void enableAllOutputs();
-  void disableAllOutputs();
-  bool outputsEnabled();
-
   long getPosition(const size_t encoder_index);
   void setPosition(const size_t encoder_index,
                    const long position);
+
+  void enableAllOutputs();
+  void disableAllOutputs();
+  bool outputsEnabled();
 
 private:
   modular_server::Pin pins_[encoder_interface_simple::constants::PIN_COUNT_MAX];
@@ -55,11 +55,11 @@ private:
   // Handlers
   void positiveEncoder0Handler(const int32_t position);
   void negativeEncoder0Handler(const int32_t position);
+  void getPositionsHandler();
+  void setPositionHandler();
   void enableAllOutputsHandler();
   void disableAllOutputsHandler();
   void outputsEnabledHandler();
-  void getPositionsHandler();
-  void setPositionHandler();
   void invertEncoderDirectionHandler(const size_t encoder_index);
 
 };

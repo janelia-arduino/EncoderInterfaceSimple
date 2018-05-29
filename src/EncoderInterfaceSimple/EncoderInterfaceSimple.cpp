@@ -15,6 +15,12 @@ void EncoderInterfaceSimple::setup()
   // Parent Setup
   ModularDeviceBase::setup();
 
+  // Reset Watchdog
+  resetWatchdog();
+
+  // Event Controller Setup
+  event_controller_.setup();
+
   // Pin Setup
   pinMode(constants::enable_pin,OUTPUT);
   enableAllOutputs();
@@ -55,16 +61,6 @@ void EncoderInterfaceSimple::setup()
   position_parameter.setTypeLong();
 
   // Functions
-  modular_server::Function & enable_all_outputs_function = modular_server_.createFunction(constants::enable_all_outputs_function_name);
-  enable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableAllOutputsHandler));
-
-  modular_server::Function & disable_all_outputs_function = modular_server_.createFunction(constants::disable_all_outputs_function_name);
-  disable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableAllOutputsHandler));
-
-  modular_server::Function & outputs_enabled_function = modular_server_.createFunction(constants::outputs_enabled_function_name);
-  outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
-  outputs_enabled_function.setResultTypeBool();
-
   modular_server::Function & get_positions_function = modular_server_.createFunction(constants::get_positions_function_name);
   get_positions_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getPositionsHandler));
   get_positions_function.setResultTypeArray();
@@ -74,6 +70,16 @@ void EncoderInterfaceSimple::setup()
   set_position_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::setPositionHandler));
   set_position_function.addParameter(encoder_index_parameter);
   set_position_function.addParameter(position_parameter);
+
+  modular_server::Function & enable_all_outputs_function = modular_server_.createFunction(constants::enable_all_outputs_function_name);
+  enable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableAllOutputsHandler));
+
+  modular_server::Function & disable_all_outputs_function = modular_server_.createFunction(constants::disable_all_outputs_function_name);
+  disable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableAllOutputsHandler));
+
+  modular_server::Function & outputs_enabled_function = modular_server_.createFunction(constants::outputs_enabled_function_name);
+  outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
+  outputs_enabled_function.setResultTypeBool();
 
   // Callbacks
 
@@ -152,22 +158,6 @@ void EncoderInterfaceSimple::negativeEncoder0Handler(const int32_t position)
                LOW);
 }
 
-void EncoderInterfaceSimple::enableAllOutputsHandler()
-{
-  enableAllOutputs();
-}
-
-void EncoderInterfaceSimple::disableAllOutputsHandler()
-{
-  disableAllOutputs();
-}
-
-void EncoderInterfaceSimple::outputsEnabledHandler()
-{
-  bool all_enabled = outputsEnabled();
-  modular_server_.response().returnResult(all_enabled);
-}
-
 void EncoderInterfaceSimple::getPositionsHandler()
 {
   modular_server_.response().writeResultKey();
@@ -194,6 +184,22 @@ void EncoderInterfaceSimple::setPositionHandler()
   modular_server_.parameter(constants::position_parameter_name).getValue(position);
 
   setPosition(encoder_index,position);
+}
+
+void EncoderInterfaceSimple::enableAllOutputsHandler()
+{
+  enableAllOutputs();
+}
+
+void EncoderInterfaceSimple::disableAllOutputsHandler()
+{
+  disableAllOutputs();
+}
+
+void EncoderInterfaceSimple::outputsEnabledHandler()
+{
+  bool all_enabled = outputsEnabled();
+  modular_server_.response().returnResult(all_enabled);
 }
 
 void EncoderInterfaceSimple::invertEncoderDirectionHandler(const size_t encoder_index)

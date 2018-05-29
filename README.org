@@ -17,27 +17,6 @@
 * API NAMES
 
   #+BEGIN_SRC js
-    {
-      "id":"getApi",
-      "result": {
-        "firmware": ["EncoderInterfaceSimple"],
-        "verbosity":"NAMES",
-        "functions": [
-          "enableAllOutputs",
-          "disableAllOutputs",
-          "outputsEnabled",
-          "getPositions",
-          "setPosition"
-        ],
-        "parameters": [
-          "encoder_index",
-          "position"
-        ],
-        "properties": [
-          "invertEncoderDirection"
-        ]
-      }
-    }
   #+END_SRC
 
 * API GENERAL
