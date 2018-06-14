@@ -23,7 +23,7 @@ void EncoderInterfaceSimple::setup()
 
   // Pin Setup
   pinMode(constants::enable_pin,OUTPUT);
-  enableAllOutputs();
+  enableOutputs();
 
   for (size_t output_index=0; output_index<constants::OUTPUT_COUNT; ++output_index)
   {
@@ -31,7 +31,8 @@ void EncoderInterfaceSimple::setup()
     digitalWrite(constants::output_pins[output_index],LOW);
   }
 
-  // Pins
+  // Sampling Setup
+  disableSampling();
 
   // Set Device ID
   modular_server_.setDeviceName(constants::device_name);
@@ -51,6 +52,7 @@ void EncoderInterfaceSimple::setup()
   invert_encoder_direction_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<const size_t> *)0,*this,&EncoderInterfaceSimple::invertEncoderDirectionHandler));
 
   modular_server::Property & sample_period_property = modular_server_.createProperty(constants::sample_period_property_name,constants::sample_period_default);
+  sample_period_property.setUnits(constants::ms_units);
   sample_period_property.setRange(constants::sample_period_min,constants::sample_period_max);
 
   // Parameters
@@ -71,15 +73,30 @@ void EncoderInterfaceSimple::setup()
   set_position_function.addParameter(encoder_index_parameter);
   set_position_function.addParameter(position_parameter);
 
-  modular_server::Function & enable_all_outputs_function = modular_server_.createFunction(constants::enable_all_outputs_function_name);
-  enable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableAllOutputsHandler));
+  modular_server::Function & enable_outputs_function = modular_server_.createFunction(constants::enable_outputs_function_name);
+  enable_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableOutputsHandler));
 
-  modular_server::Function & disable_all_outputs_function = modular_server_.createFunction(constants::disable_all_outputs_function_name);
-  disable_all_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableAllOutputsHandler));
+  modular_server::Function & disable_outputs_function = modular_server_.createFunction(constants::disable_outputs_function_name);
+  disable_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableOutputsHandler));
 
   modular_server::Function & outputs_enabled_function = modular_server_.createFunction(constants::outputs_enabled_function_name);
   outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
   outputs_enabled_function.setResultTypeBool();
+
+  modular_server::Function & enable_sampling_function = modular_server_.createFunction(constants::enable_sampling_function_name);
+  enable_sampling_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableSamplingHandler));
+
+  modular_server::Function & disable_sampling_function = modular_server_.createFunction(constants::disable_sampling_function_name);
+  disable_sampling_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableSamplingHandler));
+
+  modular_server::Function & sampling_enabled_function = modular_server_.createFunction(constants::sampling_enabled_function_name);
+  sampling_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::samplingEnabledHandler));
+  sampling_enabled_function.setResultTypeBool();
+
+  modular_server::Function & get_samples_function = modular_server_.createFunction(constants::get_samples_function_name);
+  get_samples_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getSamplesHandler));
+  get_samples_function.setResultTypeLong();
+  get_samples_function.setResultTypeArray();
 
   // Callbacks
 
@@ -91,23 +108,6 @@ void EncoderInterfaceSimple::setup()
   encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
   encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
 
-}
-
-void EncoderInterfaceSimple::enableAllOutputs()
-{
-  digitalWrite(constants::enable_pin,LOW);
-  enabled_ = true;
-}
-
-void EncoderInterfaceSimple::disableAllOutputs()
-{
-  digitalWrite(constants::enable_pin,HIGH);
-  enabled_ = false;
-}
-
-bool EncoderInterfaceSimple::outputsEnabled()
-{
-  return enabled_;
 }
 
 long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
@@ -122,6 +122,52 @@ void EncoderInterfaceSimple::setPosition(const size_t encoder_index,
                                          const long position)
 {
   encoders_[encoder_index].write(position);
+}
+
+void EncoderInterfaceSimple::enableOutputs()
+{
+  digitalWrite(constants::enable_pin,LOW);
+  outputs_enabled_ = true;
+}
+
+void EncoderInterfaceSimple::disableOutputs()
+{
+  digitalWrite(constants::enable_pin,HIGH);
+  outputs_enabled_ = false;
+}
+
+bool EncoderInterfaceSimple::outputsEnabled()
+{
+  return outputs_enabled_;
+}
+
+void EncoderInterfaceSimple::enableSampling()
+{
+  if (event_controller_.eventsAvailable() < 1)
+  {
+    return;
+  }
+  sampling_enabled_ = true;
+  long sample_period;
+  modular_server_.property(constants::sample_period_property_name).getValue(sample_period);
+  sampling_event_id_ = event_controller_.addInfiniteRecurringEvent(makeFunctor((Functor1<int> *)0,*this,&EncoderInterfaceSimple::sampleHandler),
+                                                                   sample_period,
+                                                                   -1);
+  event_controller_.enable(sampling_event_id_);
+}
+
+void EncoderInterfaceSimple::disableSampling()
+{
+  if (sampling_enabled_)
+  {
+    event_controller_.clear(sampling_event_id_);
+    sampling_enabled_ = false;
+  }
+}
+
+bool EncoderInterfaceSimple::samplingEnabled()
+{
+  return sampling_enabled_;
 }
 
 // Handlers must be non-blocking (avoid 'delay')
@@ -158,6 +204,24 @@ void EncoderInterfaceSimple::negativeEncoder0Handler(const int32_t position)
                LOW);
 }
 
+void EncoderInterfaceSimple::invertEncoderDirectionHandler(const size_t encoder_index)
+{
+  modular_server::Property & invert_encoder_direction_property = modular_server_.property(constants::invert_encoder_direction_property_name);
+  bool invert_encoder_direction;
+  invert_encoder_direction_property.getElementValue(encoder_index,invert_encoder_direction);
+
+  if (!invert_encoder_direction)
+  {
+    encoders_[encoder_index].setup(constants::encoder_a_pins[encoder_index],
+                                   constants::encoder_b_pins[encoder_index]);
+  }
+  else
+  {
+    encoders_[encoder_index].setup(constants::encoder_b_pins[encoder_index],
+                                   constants::encoder_a_pins[encoder_index]);
+  }
+}
+
 void EncoderInterfaceSimple::getPositionsHandler()
 {
   modular_server_.response().writeResultKey();
@@ -186,36 +250,75 @@ void EncoderInterfaceSimple::setPositionHandler()
   setPosition(encoder_index,position);
 }
 
-void EncoderInterfaceSimple::enableAllOutputsHandler()
+void EncoderInterfaceSimple::enableOutputsHandler()
 {
-  enableAllOutputs();
+  enableOutputs();
 }
 
-void EncoderInterfaceSimple::disableAllOutputsHandler()
+void EncoderInterfaceSimple::disableOutputsHandler()
 {
-  disableAllOutputs();
+  disableOutputs();
 }
 
 void EncoderInterfaceSimple::outputsEnabledHandler()
 {
-  bool all_enabled = outputsEnabled();
-  modular_server_.response().returnResult(all_enabled);
+  bool outputs_enabled = outputsEnabled();
+  modular_server_.response().returnResult(outputs_enabled);
 }
 
-void EncoderInterfaceSimple::invertEncoderDirectionHandler(const size_t encoder_index)
+void EncoderInterfaceSimple::enableSamplingHandler()
 {
-  modular_server::Property & invert_encoder_direction_property = modular_server_.property(constants::invert_encoder_direction_property_name);
-  bool invert_encoder_direction;
-  invert_encoder_direction_property.getElementValue(encoder_index,invert_encoder_direction);
+  enableSampling();
+}
 
-  if (!invert_encoder_direction)
+void EncoderInterfaceSimple::disableSamplingHandler()
+{
+  disableSampling();
+}
+
+void EncoderInterfaceSimple::samplingEnabledHandler()
+{
+  bool sampling_enabled = samplingEnabled();
+  modular_server_.response().returnResult(sampling_enabled);
+}
+
+void EncoderInterfaceSimple::getSamplesHandler()
+{
+  modular_server_.response().writeResultKey();
+
+  modular_server_.response().beginArray();
+
+  for (size_t sample_index=0; sample_index<samples_.size(); ++sample_index)
   {
-    encoders_[encoder_index].setup(constants::encoder_a_pins[encoder_index],
-                                   constants::encoder_b_pins[encoder_index]);
+    constants::Sample sample = samples_[sample_index];
+    modular_server_.response().beginArray();
+    modular_server_.response().write(sample.time);
+    modular_server_.response().write(sample.milliseconds);
+    for (size_t encoder_index=0; encoder_index<constants::ENCODER_COUNT; ++encoder_index)
+    {
+      modular_server_.response().write(sample.positions[encoder_index]);
+    }
+    modular_server_.response().endArray();
+  }
+
+  modular_server_.response().endArray();
+}
+
+void EncoderInterfaceSimple::sampleHandler(int index)
+{
+  constants::Sample sample;
+  if (timeIsSet())
+  {
+    sample.time = getTime();
   }
   else
   {
-    encoders_[encoder_index].setup(constants::encoder_b_pins[encoder_index],
-                                   constants::encoder_a_pins[encoder_index]);
+    sample.time = 0;
   }
+  sample.milliseconds = millis();
+  for (size_t encoder_index=0; encoder_index<constants::ENCODER_COUNT; ++encoder_index)
+  {
+    sample.positions[encoder_index] = getPosition(encoder_index);
+  }
+  samples_.push_back(sample);
 }

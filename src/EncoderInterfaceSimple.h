@@ -33,9 +33,14 @@ public:
   void setPosition(const size_t encoder_index,
                    const long position);
 
-  void enableAllOutputs();
-  void disableAllOutputs();
+  void enableOutputs();
+  void disableOutputs();
   bool outputsEnabled();
+
+  void enableSampling();
+  void disableSampling();
+  bool samplingEnabled();
+  void clearSamples();
 
 private:
   modular_server::Pin pins_[encoder_interface_simple::constants::PIN_COUNT_MAX];
@@ -45,22 +50,32 @@ private:
   modular_server::Function functions_[encoder_interface_simple::constants::FUNCTION_COUNT_MAX];
   modular_server::Callback callbacks_[encoder_interface_simple::constants::CALLBACK_COUNT_MAX];
 
-  bool enabled_;
   EncoderFunctors encoders_[encoder_interface_simple::constants::ENCODER_COUNT];
 
+  bool outputs_enabled_;
+  bool sampling_enabled_;
+
   EventController<encoder_interface_simple::constants::EVENT_COUNT_MAX> event_controller_;
+  EventId sampling_event_id_;
+
   Array<encoder_interface_simple::constants::Sample,
         encoder_interface_simple::constants::SAMPLE_COUNT_MAX> samples_;
 
   // Handlers
   void positiveEncoder0Handler(const int32_t position);
   void negativeEncoder0Handler(const int32_t position);
+  void invertEncoderDirectionHandler(const size_t encoder_index);
   void getPositionsHandler();
   void setPositionHandler();
-  void enableAllOutputsHandler();
-  void disableAllOutputsHandler();
+  void enableOutputsHandler();
+  void disableOutputsHandler();
   void outputsEnabledHandler();
-  void invertEncoderDirectionHandler(const size_t encoder_index);
+  void enableSamplingHandler();
+  void disableSamplingHandler();
+  void samplingEnabledHandler();
+  void getSamplesHandler();
+  void clearSamplesHandler();
+  void sampleHandler(int index);
 
 };
 
