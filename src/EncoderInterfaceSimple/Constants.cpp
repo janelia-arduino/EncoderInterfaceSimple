@@ -29,7 +29,7 @@ CONSTANT_STRING(hardware_name,"encoder_interface_simple");
 // Pins
 
 // Units
-CONSTANT_STRING(ms_units,"s");
+CONSTANT_STRING(ms_units,"ms");
 
 // Properties
 CONSTANT_STRING(invert_encoder_direction_property_name,"invertEncoderDirection");
@@ -48,16 +48,18 @@ CONSTANT_STRING(position_parameter_name,"position");
 // Functions
 CONSTANT_STRING(get_positions_function_name,"getPositions");
 CONSTANT_STRING(set_position_function_name,"setPosition");
-CONSTANT_STRING(enable_outputs_function_name,"enableOutputs");
-CONSTANT_STRING(disable_outputs_function_name,"disableOutputs");
 CONSTANT_STRING(outputs_enabled_function_name,"outputsEnabled");
-CONSTANT_STRING(enable_sampling_function_name,"enableSampling");
-CONSTANT_STRING(disable_sampling_function_name,"disableSampling");
 CONSTANT_STRING(sampling_enabled_function_name,"samplingEnabled");
 CONSTANT_STRING(get_samples_function_name,"getSamples");
-CONSTANT_STRING(clear_samples_function_name,"clearSamples");
+CONSTANT_STRING(get_sample_count_function_name,"getSampleCount");
+CONSTANT_STRING(get_sample_count_max_function_name,"getSampleCountMax");
 
 // Callbacks
+CONSTANT_STRING(enable_outputs_callback_name,"enableOutputs");
+CONSTANT_STRING(disable_outputs_callback_name,"disableOutputs");
+CONSTANT_STRING(enable_sampling_callback_name,"enableSampling");
+CONSTANT_STRING(disable_sampling_callback_name,"disableSampling");
+CONSTANT_STRING(clear_samples_callback_name,"clearSamples");
 
 // Errors
 }

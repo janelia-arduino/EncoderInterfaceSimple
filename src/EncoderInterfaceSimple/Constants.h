@@ -20,8 +20,8 @@ namespace constants
 //MAX values must be >= 1, >= created/copied count, < RAM limit
 enum{PROPERTY_COUNT_MAX=2};
 enum{PARAMETER_COUNT_MAX=2};
-enum{FUNCTION_COUNT_MAX=10};
-enum{CALLBACK_COUNT_MAX=1};
+enum{FUNCTION_COUNT_MAX=7};
+enum{CALLBACK_COUNT_MAX=5};
 
 enum{EVENT_COUNT_MAX=16};
 
@@ -58,16 +58,18 @@ extern ConstantString position_parameter_name;
 // Functions
 extern ConstantString get_positions_function_name;
 extern ConstantString set_position_function_name;
-extern ConstantString enable_outputs_function_name;
-extern ConstantString disable_outputs_function_name;
 extern ConstantString outputs_enabled_function_name;
-extern ConstantString enable_sampling_function_name;
-extern ConstantString disable_sampling_function_name;
 extern ConstantString sampling_enabled_function_name;
 extern ConstantString get_samples_function_name;
-extern ConstantString clear_samples_function_name;
+extern ConstantString get_sample_count_function_name;
+extern ConstantString get_sample_count_max_function_name;
 
 // Callbacks
+extern ConstantString enable_outputs_callback_name;
+extern ConstantString disable_outputs_callback_name;
+extern ConstantString enable_sampling_callback_name;
+extern ConstantString disable_sampling_callback_name;
+extern ConstantString clear_samples_callback_name;
 
 // Errors
 }

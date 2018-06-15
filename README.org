@@ -17,6 +17,39 @@
 * API NAMES
 
   #+BEGIN_SRC js
+    {
+      "id": "getApi",
+      "result": {
+        "firmware": [
+          "EncoderInterfaceSimple"
+        ],
+        "verbosity": "NAMES",
+        "functions": [
+          "getPositions",
+          "setPosition",
+          "outputsEnabled",
+          "samplingEnabled",
+          "getSamples",
+          "getSampleCount",
+          "getSampleCountMax"
+        ],
+        "parameters": [
+          "encoder_index",
+          "position"
+        ],
+        "properties": [
+          "invertEncoderDirection",
+          "samplePeriod"
+        ],
+        "callbacks": [
+          "enableOutputs",
+          "disableOutputs",
+          "enableSampling",
+          "disableSampling",
+          "clearSamples"
+        ]
+      }
+    }
   #+END_SRC
 
 * API GENERAL

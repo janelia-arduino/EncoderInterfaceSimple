@@ -73,21 +73,9 @@ void EncoderInterfaceSimple::setup()
   set_position_function.addParameter(encoder_index_parameter);
   set_position_function.addParameter(position_parameter);
 
-  modular_server::Function & enable_outputs_function = modular_server_.createFunction(constants::enable_outputs_function_name);
-  enable_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableOutputsHandler));
-
-  modular_server::Function & disable_outputs_function = modular_server_.createFunction(constants::disable_outputs_function_name);
-  disable_outputs_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableOutputsHandler));
-
   modular_server::Function & outputs_enabled_function = modular_server_.createFunction(constants::outputs_enabled_function_name);
   outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
   outputs_enabled_function.setResultTypeBool();
-
-  modular_server::Function & enable_sampling_function = modular_server_.createFunction(constants::enable_sampling_function_name);
-  enable_sampling_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::enableSamplingHandler));
-
-  modular_server::Function & disable_sampling_function = modular_server_.createFunction(constants::disable_sampling_function_name);
-  disable_sampling_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::disableSamplingHandler));
 
   modular_server::Function & sampling_enabled_function = modular_server_.createFunction(constants::sampling_enabled_function_name);
   sampling_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::samplingEnabledHandler));
@@ -98,7 +86,30 @@ void EncoderInterfaceSimple::setup()
   get_samples_function.setResultTypeLong();
   get_samples_function.setResultTypeArray();
 
+  modular_server::Function & get_sample_count_function = modular_server_.createFunction(constants::get_sample_count_function_name);
+  get_sample_count_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getSampleCountHandler));
+  get_sample_count_function.setResultTypeLong();
+
+  modular_server::Function & get_sample_count_max_function = modular_server_.createFunction(constants::get_sample_count_max_function_name);
+  get_sample_count_max_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getSampleCountMaxHandler));
+  get_sample_count_max_function.setResultTypeLong();
+
   // Callbacks
+  modular_server::Callback & enable_outputs_callback = modular_server_.createCallback(constants::enable_outputs_callback_name);
+  enable_outputs_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::enableOutputsHandler));
+
+  modular_server::Callback & disable_outputs_callback = modular_server_.createCallback(constants::disable_outputs_callback_name);
+  disable_outputs_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::disableOutputsHandler));
+
+  modular_server::Callback & enable_sampling_callback = modular_server_.createCallback(constants::enable_sampling_callback_name);
+  enable_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::enableSamplingHandler));
+
+  modular_server::Callback & disable_sampling_callback = modular_server_.createCallback(constants::disable_sampling_callback_name);
+  disable_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::disableSamplingHandler));
+
+
+  modular_server::Callback & clear_samples_callback = modular_server_.createCallback(constants::clear_samples_callback_name);
+  clear_samples_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::clearSamplesHandler));
 
   // Encoders Setup
   for (size_t encoder_index=0; encoder_index<constants::ENCODER_COUNT; ++encoder_index)
@@ -168,6 +179,21 @@ void EncoderInterfaceSimple::disableSampling()
 bool EncoderInterfaceSimple::samplingEnabled()
 {
   return sampling_enabled_;
+}
+
+void EncoderInterfaceSimple::clearSamples()
+{
+  samples_.clear();
+}
+
+size_t EncoderInterfaceSimple::getSampleCount()
+{
+  return samples_.size();
+}
+
+size_t EncoderInterfaceSimple::getSampleCountMax()
+{
+  return samples_.max_size();
 }
 
 // Handlers must be non-blocking (avoid 'delay')
@@ -250,30 +276,10 @@ void EncoderInterfaceSimple::setPositionHandler()
   setPosition(encoder_index,position);
 }
 
-void EncoderInterfaceSimple::enableOutputsHandler()
-{
-  enableOutputs();
-}
-
-void EncoderInterfaceSimple::disableOutputsHandler()
-{
-  disableOutputs();
-}
-
 void EncoderInterfaceSimple::outputsEnabledHandler()
 {
   bool outputs_enabled = outputsEnabled();
   modular_server_.response().returnResult(outputs_enabled);
-}
-
-void EncoderInterfaceSimple::enableSamplingHandler()
-{
-  enableSampling();
-}
-
-void EncoderInterfaceSimple::disableSamplingHandler()
-{
-  disableSampling();
 }
 
 void EncoderInterfaceSimple::samplingEnabledHandler()
@@ -302,6 +308,41 @@ void EncoderInterfaceSimple::getSamplesHandler()
   }
 
   modular_server_.response().endArray();
+}
+
+void EncoderInterfaceSimple::getSampleCountHandler()
+{
+  modular_server_.response().returnResult(getSampleCount());
+}
+
+void EncoderInterfaceSimple::getSampleCountMaxHandler()
+{
+  modular_server_.response().returnResult(getSampleCountMax());
+}
+
+void EncoderInterfaceSimple::enableOutputsHandler(modular_server::Pin * pin_ptr)
+{
+  enableOutputs();
+}
+
+void EncoderInterfaceSimple::disableOutputsHandler(modular_server::Pin * pin_ptr)
+{
+  disableOutputs();
+}
+
+void EncoderInterfaceSimple::enableSamplingHandler(modular_server::Pin * pin_ptr)
+{
+  enableSampling();
+}
+
+void EncoderInterfaceSimple::disableSamplingHandler(modular_server::Pin * pin_ptr)
+{
+  disableSampling();
+}
+
+void EncoderInterfaceSimple::clearSamplesHandler(modular_server::Pin * pin_ptr)
+{
+  clearSamples();
 }
 
 void EncoderInterfaceSimple::sampleHandler(int index)

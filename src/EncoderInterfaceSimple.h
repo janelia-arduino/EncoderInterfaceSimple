@@ -41,6 +41,8 @@ public:
   void disableSampling();
   bool samplingEnabled();
   void clearSamples();
+  size_t getSampleCount();
+  size_t getSampleCountMax();
 
 private:
   modular_server::Pin pins_[encoder_interface_simple::constants::PIN_COUNT_MAX];
@@ -67,14 +69,16 @@ private:
   void invertEncoderDirectionHandler(const size_t encoder_index);
   void getPositionsHandler();
   void setPositionHandler();
-  void enableOutputsHandler();
-  void disableOutputsHandler();
   void outputsEnabledHandler();
-  void enableSamplingHandler();
-  void disableSamplingHandler();
   void samplingEnabledHandler();
   void getSamplesHandler();
-  void clearSamplesHandler();
+  void getSampleCountHandler();
+  void getSampleCountMaxHandler();
+  void enableOutputsHandler(modular_server::Pin * pin_ptr);
+  void disableOutputsHandler(modular_server::Pin * pin_ptr);
+  void enableSamplingHandler(modular_server::Pin * pin_ptr);
+  void disableSamplingHandler(modular_server::Pin * pin_ptr);
+  void clearSamplesHandler(modular_server::Pin * pin_ptr);
   void sampleHandler(int index);
 
 };
