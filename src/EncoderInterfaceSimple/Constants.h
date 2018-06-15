@@ -59,7 +59,7 @@ extern ConstantString position_parameter_name;
 extern ConstantString get_positions_function_name;
 extern ConstantString set_position_function_name;
 extern ConstantString outputs_enabled_function_name;
-extern ConstantString sampling_enabled_function_name;
+extern ConstantString sampling_function_name;
 extern ConstantString get_samples_function_name;
 extern ConstantString get_sample_count_function_name;
 extern ConstantString get_sample_count_max_function_name;
@@ -67,8 +67,8 @@ extern ConstantString get_sample_count_max_function_name;
 // Callbacks
 extern ConstantString enable_outputs_callback_name;
 extern ConstantString disable_outputs_callback_name;
-extern ConstantString enable_sampling_callback_name;
-extern ConstantString disable_sampling_callback_name;
+extern ConstantString start_sampling_callback_name;
+extern ConstantString stop_sampling_callback_name;
 extern ConstantString clear_samples_callback_name;
 
 // Errors

@@ -32,7 +32,7 @@ void EncoderInterfaceSimple::setup()
   }
 
   // Sampling Setup
-  disableSampling();
+  stopSampling();
 
   // Set Device ID
   modular_server_.setDeviceName(constants::device_name);
@@ -77,9 +77,9 @@ void EncoderInterfaceSimple::setup()
   outputs_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::outputsEnabledHandler));
   outputs_enabled_function.setResultTypeBool();
 
-  modular_server::Function & sampling_enabled_function = modular_server_.createFunction(constants::sampling_enabled_function_name);
-  sampling_enabled_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::samplingEnabledHandler));
-  sampling_enabled_function.setResultTypeBool();
+  modular_server::Function & sampling_function = modular_server_.createFunction(constants::sampling_function_name);
+  sampling_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::samplingHandler));
+  sampling_function.setResultTypeBool();
 
   modular_server::Function & get_samples_function = modular_server_.createFunction(constants::get_samples_function_name);
   get_samples_function.attachFunctor(makeFunctor((Functor0 *)0,*this,&EncoderInterfaceSimple::getSamplesHandler));
@@ -101,11 +101,11 @@ void EncoderInterfaceSimple::setup()
   modular_server::Callback & disable_outputs_callback = modular_server_.createCallback(constants::disable_outputs_callback_name);
   disable_outputs_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::disableOutputsHandler));
 
-  modular_server::Callback & enable_sampling_callback = modular_server_.createCallback(constants::enable_sampling_callback_name);
-  enable_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::enableSamplingHandler));
+  modular_server::Callback & start_sampling_callback = modular_server_.createCallback(constants::start_sampling_callback_name);
+  start_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::startSamplingHandler));
 
-  modular_server::Callback & disable_sampling_callback = modular_server_.createCallback(constants::disable_sampling_callback_name);
-  disable_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::disableSamplingHandler));
+  modular_server::Callback & stop_sampling_callback = modular_server_.createCallback(constants::stop_sampling_callback_name);
+  stop_sampling_callback.attachFunctor(makeFunctor((Functor1<modular_server::Pin *> *)0,*this,&EncoderInterfaceSimple::stopSamplingHandler));
 
 
   modular_server::Callback & clear_samples_callback = modular_server_.createCallback(constants::clear_samples_callback_name);
@@ -152,13 +152,13 @@ bool EncoderInterfaceSimple::outputsEnabled()
   return outputs_enabled_;
 }
 
-void EncoderInterfaceSimple::enableSampling()
+void EncoderInterfaceSimple::startSampling()
 {
   if (event_controller_.eventsAvailable() < 1)
   {
     return;
   }
-  sampling_enabled_ = true;
+  sampling_ = true;
   long sample_period;
   modular_server_.property(constants::sample_period_property_name).getValue(sample_period);
   sampling_event_id_ = event_controller_.addInfiniteRecurringEvent(makeFunctor((Functor1<int> *)0,*this,&EncoderInterfaceSimple::sampleHandler),
@@ -167,18 +167,18 @@ void EncoderInterfaceSimple::enableSampling()
   event_controller_.enable(sampling_event_id_);
 }
 
-void EncoderInterfaceSimple::disableSampling()
+void EncoderInterfaceSimple::stopSampling()
 {
-  if (sampling_enabled_)
+  if (sampling_)
   {
     event_controller_.clear(sampling_event_id_);
-    sampling_enabled_ = false;
+    sampling_ = false;
   }
 }
 
-bool EncoderInterfaceSimple::samplingEnabled()
+bool EncoderInterfaceSimple::sampling()
 {
-  return sampling_enabled_;
+  return sampling_;
 }
 
 void EncoderInterfaceSimple::clearSamples()
@@ -282,10 +282,10 @@ void EncoderInterfaceSimple::outputsEnabledHandler()
   modular_server_.response().returnResult(outputs_enabled);
 }
 
-void EncoderInterfaceSimple::samplingEnabledHandler()
+void EncoderInterfaceSimple::samplingHandler()
 {
-  bool sampling_enabled = samplingEnabled();
-  modular_server_.response().returnResult(sampling_enabled);
+  bool is_sampling = sampling();
+  modular_server_.response().returnResult(is_sampling);
 }
 
 void EncoderInterfaceSimple::getSamplesHandler()
@@ -330,14 +330,14 @@ void EncoderInterfaceSimple::disableOutputsHandler(modular_server::Pin * pin_ptr
   disableOutputs();
 }
 
-void EncoderInterfaceSimple::enableSamplingHandler(modular_server::Pin * pin_ptr)
+void EncoderInterfaceSimple::startSamplingHandler(modular_server::Pin * pin_ptr)
 {
-  enableSampling();
+  startSampling();
 }
 
-void EncoderInterfaceSimple::disableSamplingHandler(modular_server::Pin * pin_ptr)
+void EncoderInterfaceSimple::stopSamplingHandler(modular_server::Pin * pin_ptr)
 {
-  disableSampling();
+  stopSampling();
 }
 
 void EncoderInterfaceSimple::clearSamplesHandler(modular_server::Pin * pin_ptr)

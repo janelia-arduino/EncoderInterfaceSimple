@@ -4,7 +4,7 @@
 
 * Library Information
   - Name :: EncoderInterfaceSimple
-  - Version :: 2.0.0
+  - Version :: 3.0.0
   - License :: BSD
   - URL :: https://github.com/janelia-arduino/EncoderInterfaceSimple
   - Author :: Peter Polidoro
@@ -28,7 +28,7 @@
           "getPositions",
           "setPosition",
           "outputsEnabled",
-          "samplingEnabled",
+          "sampling",
           "getSamples",
           "getSampleCount",
           "getSampleCountMax"
@@ -44,8 +44,8 @@
         "callbacks": [
           "enableOutputs",
           "disableOutputs",
-          "enableSampling",
-          "disableSampling",
+          "startSampling",
+          "stopSampling",
           "clearSamples"
         ]
       }

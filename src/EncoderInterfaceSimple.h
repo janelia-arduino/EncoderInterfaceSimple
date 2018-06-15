@@ -37,9 +37,9 @@ public:
   void disableOutputs();
   bool outputsEnabled();
 
-  void enableSampling();
-  void disableSampling();
-  bool samplingEnabled();
+  void startSampling();
+  void stopSampling();
+  bool sampling();
   void clearSamples();
   size_t getSampleCount();
   size_t getSampleCountMax();
@@ -55,7 +55,7 @@ private:
   EncoderFunctors encoders_[encoder_interface_simple::constants::ENCODER_COUNT];
 
   bool outputs_enabled_;
-  bool sampling_enabled_;
+  bool sampling_;
 
   EventController<encoder_interface_simple::constants::EVENT_COUNT_MAX> event_controller_;
   EventId sampling_event_id_;
@@ -70,14 +70,14 @@ private:
   void getPositionsHandler();
   void setPositionHandler();
   void outputsEnabledHandler();
-  void samplingEnabledHandler();
+  void samplingHandler();
   void getSamplesHandler();
   void getSampleCountHandler();
   void getSampleCountMaxHandler();
   void enableOutputsHandler(modular_server::Pin * pin_ptr);
   void disableOutputsHandler(modular_server::Pin * pin_ptr);
-  void enableSamplingHandler(modular_server::Pin * pin_ptr);
-  void disableSamplingHandler(modular_server::Pin * pin_ptr);
+  void startSamplingHandler(modular_server::Pin * pin_ptr);
+  void stopSamplingHandler(modular_server::Pin * pin_ptr);
   void clearSamplesHandler(modular_server::Pin * pin_ptr);
   void sampleHandler(int index);
 

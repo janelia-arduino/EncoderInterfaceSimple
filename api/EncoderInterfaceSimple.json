@@ -27,7 +27,7 @@
         }
       },
       {
-        "name": "samplingEnabled",
+        "name": "sampling",
         "result_info": {
           "type": "bool"
         }
@@ -288,7 +288,7 @@
         ]
       },
       {
-        "name": "enableSampling",
+        "name": "startSampling",
         "functions": [
           {
             "name": "trigger"
@@ -319,7 +319,7 @@
         ]
       },
       {
-        "name": "disableSampling",
+        "name": "stopSampling",
         "functions": [
           {
             "name": "trigger"
