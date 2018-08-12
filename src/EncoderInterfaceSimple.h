@@ -3,7 +3,7 @@
 //
 //
 // Authors:
-// Peter Polidoro polidorop@janelia.hhmi.org
+// Peter Polidoro peterpolidoro@gmail.com
 // ----------------------------------------------------------------------------
 #ifndef ENCODER_INTERFACE_SIMPLE_H
 #define ENCODER_INTERFACE_SIMPLE_H
