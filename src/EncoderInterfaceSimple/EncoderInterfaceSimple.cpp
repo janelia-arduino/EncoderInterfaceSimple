@@ -116,8 +116,8 @@ void EncoderInterfaceSimple::setup()
   {
     invertEncoderDirectionHandler(encoder_index);
   }
-  encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
-  encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
+  // encoders_[0].attachPositiveFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::positiveEncoder0Handler));
+  // encoders_[0].attachNegativeFunctor(makeFunctor((Functor1<int32_t> *)0,*this,&EncoderInterfaceSimple::negativeEncoder0Handler));
 
 }
 
