@@ -31,7 +31,7 @@ public:
 
   long getPosition(const size_t encoder_index);
   void setPosition(const size_t encoder_index,
-                   const long position);
+    const long position);
 
   void enableOutputs();
   void disableOutputs();
@@ -61,7 +61,7 @@ private:
   EventId sampling_event_id_;
 
   Array<encoder_interface_simple::constants::Sample,
-        encoder_interface_simple::constants::SAMPLE_COUNT_MAX> samples_;
+    encoder_interface_simple::constants::SAMPLE_COUNT_MAX> samples_;
 
   // Handlers
   void positiveEncoder0Handler(const int32_t position);
