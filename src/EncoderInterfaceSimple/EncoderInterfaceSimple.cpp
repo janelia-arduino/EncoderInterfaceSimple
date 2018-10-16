@@ -49,7 +49,7 @@ void EncoderInterfaceSimple::setup()
     callbacks_);
   // Properties
   modular_server::Property & invert_encoder_direction_property = modular_server_.createProperty(constants::invert_encoder_direction_property_name,constants::invert_encoder_direction_default);
-  invert_encoder_direction_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<const size_t> *)0,*this,&EncoderInterfaceSimple::invertEncoderDirectionHandler));
+  invert_encoder_direction_property.attachPostSetElementValueFunctor(makeFunctor((Functor1<size_t> *)0,*this,&EncoderInterfaceSimple::invertEncoderDirectionHandler));
 
   modular_server::Property & sample_period_property = modular_server_.createProperty(constants::sample_period_property_name,constants::sample_period_default);
   sample_period_property.setUnits(constants::ms_units);
@@ -121,7 +121,7 @@ void EncoderInterfaceSimple::setup()
 
 }
 
-long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
+long EncoderInterfaceSimple::getPosition(size_t encoder_index)
 {
   noInterrupts();
   long position = encoders_[encoder_index].read();
@@ -129,8 +129,8 @@ long EncoderInterfaceSimple::getPosition(const size_t encoder_index)
   return position;
 }
 
-void EncoderInterfaceSimple::setPosition(const size_t encoder_index,
-  const long position)
+void EncoderInterfaceSimple::setPosition(size_t encoder_index,
+  long position)
 {
   encoders_[encoder_index].write(position);
 }
@@ -214,7 +214,7 @@ size_t EncoderInterfaceSimple::getSampleCountMax()
 // modular_server_.property(property_name).getElementValue(element_index,value) value type must match the property array element default type
 // modular_server_.property(property_name).setElementValue(element_index,value) value type must match the property array element default type
 
-void EncoderInterfaceSimple::positiveEncoder0Handler(const int32_t position)
+void EncoderInterfaceSimple::positiveEncoder0Handler(int32_t position)
 {
   digitalWrite(constants::output_pins[0],
     !digitalRead(constants::output_pins[0]));
@@ -222,7 +222,7 @@ void EncoderInterfaceSimple::positiveEncoder0Handler(const int32_t position)
     HIGH);
 }
 
-void EncoderInterfaceSimple::negativeEncoder0Handler(const int32_t position)
+void EncoderInterfaceSimple::negativeEncoder0Handler(int32_t position)
 {
   digitalWrite(constants::output_pins[0],
     !digitalRead(constants::output_pins[0]));
@@ -230,7 +230,7 @@ void EncoderInterfaceSimple::negativeEncoder0Handler(const int32_t position)
     LOW);
 }
 
-void EncoderInterfaceSimple::invertEncoderDirectionHandler(const size_t encoder_index)
+void EncoderInterfaceSimple::invertEncoderDirectionHandler(size_t encoder_index)
 {
   modular_server::Property & invert_encoder_direction_property = modular_server_.property(constants::invert_encoder_direction_property_name);
   bool invert_encoder_direction;
