@@ -29,9 +29,9 @@ class EncoderInterfaceSimple : public ModularDeviceBase
 public:
   virtual void setup();
 
-  long getPosition(const size_t encoder_index);
-  void setPosition(const size_t encoder_index,
-                   const long position);
+  long getPosition(size_t encoder_index);
+  void setPosition(size_t encoder_index,
+                   long position);
 
   void enableOutputs();
   void disableOutputs();
@@ -64,9 +64,9 @@ private:
         encoder_interface_simple::constants::SAMPLE_COUNT_MAX> samples_;
 
   // Handlers
-  void positiveEncoder0Handler(const int32_t position);
-  void negativeEncoder0Handler(const int32_t position);
-  void invertEncoderDirectionHandler(const size_t encoder_index);
+  void positiveEncoder0Handler(int32_t position);
+  void negativeEncoder0Handler(int32_t position);
+  void invertEncoderDirectionHandler(size_t encoder_index);
   void getPositionsHandler();
   void setPositionHandler();
   void outputsEnabledHandler();
