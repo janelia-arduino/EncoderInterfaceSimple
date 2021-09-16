@@ -3,7 +3,7 @@
 //
 //
 // Authors:
-// Peter Polidoro peterpolidoro@gmail.com
+// Peter Polidoro peter@polidoro.io
 // ----------------------------------------------------------------------------
 #ifndef ENCODER_INTERFACE_SIMPLE_CONSTANTS_H
 #define ENCODER_INTERFACE_SIMPLE_CONSTANTS_H
